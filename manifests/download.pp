@@ -149,7 +149,7 @@ define mediafetch::download (
         command     => "curl --connect-timeout 12000 ${real_arg} -o ${cache_dir}/${name} ${url}",
         creates     => "${cache_dir}/${name}",
         logoutput   => true,
-        timeout     => $timeout,
+        timeout     => 100000000,
         require     => [ Package['curl'], File[$cache_dir] ],
         notify      => $notify_download,
         refreshonly => $refreshonly_download,
