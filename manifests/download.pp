@@ -10,7 +10,7 @@ define mediafetch::download (
   $digest_url     = '',
   $digest_string  = '',
   $digest_type    = 'md5',
-  $timeout        = 1200,
+  $timeout        = 12000,
   $cache_dir      = '/var/cache/medialibrary',
   $allow_insecure = true,
   $allow_resume   = true,
@@ -61,7 +61,7 @@ define mediafetch::download (
 
           # Download checksum file.
           exec { "download digest of archive ${name}":
-            command     => "curl ${real_arg} -o ${cache_dir}/${name}.${digest_type} ${digest_src}",
+            command     => "curl --connect-timeout 12000 ${real_arg} -o ${cache_dir}/${name}.${digest_type} ${digest_src}",
             creates     => "${cache_dir}/${name}.${digest_type}",
             timeout     => $timeout,
             notify      => Exec["download archive ${name} and check sum"],
@@ -146,7 +146,7 @@ define mediafetch::download (
 
       # Download actual file.
       exec { "download archive ${name} and check sum":
-        command     => "curl ${real_arg} -o ${cache_dir}/${name} ${url}",
+        command     => "curl --connect-timeout 12000 ${real_arg} -o ${cache_dir}/${name} ${url}",
         creates     => "${cache_dir}/${name}",
         logoutput   => true,
         timeout     => $timeout,
@@ -197,5 +197,3 @@ define mediafetch::download (
 
   }
 }
-
-
